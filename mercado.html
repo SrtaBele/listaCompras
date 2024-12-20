@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de Compras</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-image: url('fotoGato/fundo1.jpg');
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fdfdfd;
+        }
+        #product-list {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 40px;
+            display: block;
+            margin-left:500px;
+        }
+        .product {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 40%;
+            margin-bottom: 20px;
+        }
+        .product span {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .product button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .product button:hover {
+            background-color: #218838;
+        }
+        #cart {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        #cart h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        #cart-items {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-item span {
+            font-size: 16px;
+            color: #555;
+        }
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 7px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+        #empty-cart {
+            text-align: center;
+            font-size: 16px;
+            color: #888;
+        }
+        img{
+            width: 50%;
+        }
+        p{
+            height: 70pt;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container"></div>
+    <h1>Loja de Animais (nada) Suspeitos</h1>
+
+    <div id="product-list">
+        <div class="product">
+            <span>Gato calvo</span>
+            <button onclick="addToCart('Gato calvo')">Adicionar ao Carrinho</button>
+            <img src="fotoGato/gato calvo.jpg"/>
+            <p>Entraram na minha casa e calvaram o meu gato. Estou vendendo por uma box of good good.</p>
+        </div>
+        <div class="product">
+            <span>Carrocho calvo</span>
+            <button onclick="addToCart('Carrocho calvo')">Adicionar ao Carrinho</button>
+            <img src="fotoGato/cachorro.jpg"/>
+            <p>Perro sin pelo en la cabeza. Vendo un perro por R$ 10.000,00.</p>
+        </div>
+        <div class="product">
+            <span>Carrocho de crocks</span>
+            <button onclick="addToCart('Carrocho de crocks')">Adicionar ao Carrinho</button>
+            <img src="fotoGato/carrocho.jpg"/>
+            <p>O cachorro roubou meu crocks e saiu correndo pra assaltar um banco. Estou atrás dele. Quem quiser ajudar a capturar esse jaguara, vai receber uma recompensa de R$ 4.530,01.</p>
+        </div>
+    </div>
+
+    <div id="cart">
+        <h2>Carrinho</h2>
+        <ul id="cart-items"></ul>
+    </div>
+
+    <script>
+        // Função para carregar os produtos salvos no localStorage ao inicializar a página
+        function loadCart() {
+            const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartList = document.getElementById('cart-items');
+            cartList.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartList.innerHTML = '<p id="empty-cart">O carrinho está vazio</p>';
+            }
+
+            cartItems.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.classList.add('cart-item');
+
+                // Texto do produto
+                const productText = document.createElement('span');
+                productText.textContent = item;
+
+                // Botão de remover
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = 'Remover';
+                removeBtn.classList.add('remove-btn');
+                removeBtn.onclick = () => removeFromCart(index);
+
+                li.appendChild(productText);
+                li.appendChild(removeBtn);
+                cartList.appendChild(li);
+            });
+        }
+
+        // Função para adicionar produtos ao carrinho e salvar no localStorage
+        function addToCart(product) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            cartItems.push(product);
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            loadCart();  // Atualiza o carrinho exibido na página
+        }
+
+        // Função para remover produtos do carrinho e atualizar o localStorage
+        function removeFromCart(index) {
+            let cartItems = JSON.parse(localStorage.getItem('cart')) || [];
+            cartItems.splice(index, 1);  // Remove o item pelo índice
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            loadCart();  // Atualiza o carrinho exibido na página
+        }
+
+        // Carregar o carrinho ao inicializar a página
+        window.onload = loadCart;
+    </script>
+
+</body>
+</html>
